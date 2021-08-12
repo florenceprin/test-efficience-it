@@ -12,7 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method FicheContact[]    findAll()
  * @method FicheContact[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ContactRepository extends ServiceEntityRepository
+class FicheContactRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
