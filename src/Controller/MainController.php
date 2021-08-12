@@ -23,6 +23,7 @@ class MainController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $ficheContact = $form->getData();
+            $ficheContact->setCreatedAt(new \DateTimeImmutable());
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($ficheContact);
             $entityManager->flush($ficheContact);
