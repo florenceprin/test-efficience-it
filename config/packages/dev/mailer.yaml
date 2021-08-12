@@ -1,4 +1,3 @@
 framework:
     mailer:
-        envelope:
-            recipients: ['%env(EMAIL_DE_TESTS)%']
+        dsn: 'null://null'
