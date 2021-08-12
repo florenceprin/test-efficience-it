@@ -7,6 +7,12 @@
 </style>
 
 <div>
+    {% for message in app.flashes('success') %}
+        <div>
+            {{ message }}
+        </div>
+    {% endfor %}
+
     <h1>Formulaire de contact</h1>
 
     {{ form(form) }}
