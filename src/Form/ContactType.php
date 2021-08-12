@@ -21,7 +21,7 @@ class ContactType extends AbstractType
             ->add('Message',TextAreaType::class)
             ->add('Departement',EntityType::class, [
                 'label'=> 'Départements',
-                'class'=> Departements:class,
+                'class'=> Departements::class,
             ])
         ;
     }
