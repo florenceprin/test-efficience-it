@@ -30,12 +30,12 @@ class Contact
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $mail;
+    private $Email;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $message;
+    private $Message;
 
     /**
      * @ORM\ManyToOne(targetEntity=Departements::class)
