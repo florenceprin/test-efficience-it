@@ -37,6 +37,12 @@ class Contact
      */
     private $message;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Departements::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $Departement;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -86,6 +92,18 @@ class Contact
     public function setMessage(string $message): self
     {
         $this->message = $message;
+
+        return $this;
+    }
+
+    public function getDepartement(): ?Departements
+    {
+        return $this->Departement;
+    }
+
+    public function setDepartement(?Departements $Departement): self
+    {
+        $this->Departement = $Departement;
 
         return $this;
     }

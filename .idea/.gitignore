@@ -6,3 +6,6 @@
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
+/php.xml
+/phpunit.xml
+/test-Efficience-IT-2021.iml
