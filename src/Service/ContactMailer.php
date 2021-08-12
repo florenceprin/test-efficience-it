@@ -9,7 +9,13 @@ use Symfony\Component\Mime\Email;
 class ContactMailer
 {
 
-    public function sendMail(FicheContact $ficheContact, MailerInterface $mailer)
+    private $mailer;
+
+    public function __construct(MailerInterface $mailer){
+        $this->mailer=$mailer;
+    }
+
+    public function sendMail(FicheContact $ficheContact)
     {
         $destinataire = $ficheContact->getDepartement()->getEmail();
         $expediteur = $ficheContact->getEmail();
@@ -17,11 +23,11 @@ class ContactMailer
         $email = (new Email())
             ->from($expediteur)
             ->to($destinataire)
-            ->subject('Mail from contact oage')
+            ->subject('Mail from contact page')
             ->text($ficheContact->getMessage());;
 
         try {
-            $mailer->send($email);
+            $this->mailer->send($email);
             return true;
         } catch (\Exception $e) {
             return false;
