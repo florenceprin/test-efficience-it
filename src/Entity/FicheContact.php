@@ -20,28 +20,28 @@ class FicheContact
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $Nom;
+    private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $Prenom;
+    private $prenom;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $Email;
+    private $email;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $Message;
+    private $message;
 
     /**
      * @ORM\ManyToOne(targetEntity=Departements::class)
      * @ORM\JoinColumn(nullable=false)
      */
-    private $Departement;
+    private $departement;
 
     public function getId(): ?int
     {
@@ -50,36 +50,36 @@ class FicheContact
 
     public function getNom(): ?string
     {
-        return $this->Nom;
+        return $this->nom;
     }
 
-    public function setNom(string $Nom): self
+    public function setNom(string $nom): self
     {
-        $this->Nom = $Nom;
+        $this->nom = $nom;
 
         return $this;
     }
 
     public function getPrenom(): ?string
     {
-        return $this->Prenom;
+        return $this->prenom;
     }
 
-    public function setPrenom(string $Prenom): self
+    public function setPrenom(string $prenom): self
     {
-        $this->Prenom = $Prenom;
+        $this->prenom = $prenom;
 
         return $this;
     }
 
-    public function getMail(): ?string
+    public function getEmail(): ?string
     {
-        return $this->mail;
+        return $this->email;
     }
 
-    public function setMail(string $mail): self
+    public function setEmail(string $mail): self
     {
-        $this->mail = $mail;
+        $this->email = $mail;
 
         return $this;
     }
@@ -98,12 +98,12 @@ class FicheContact
 
     public function getDepartement(): ?Departements
     {
-        return $this->Departement;
+        return $this->departement;
     }
 
-    public function setDepartement(?Departements $Departement): self
+    public function setDepartement(?Departements $departement): self
     {
-        $this->Departement = $Departement;
+        $this->departement = $departement;
 
         return $this;
     }
