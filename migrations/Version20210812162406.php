@@ -20,7 +20,7 @@ final class Version20210812162406 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('INSERT INTO departements (nom, email) VALUES
+        $this->addSql('INSERT INTO departements (name, email) VALUES
         (\'RH\',\'rh@efficience-it.com\'),  
         (\'commerciaux\',\'commerce@efficience-it.com\'),
         (\'informations\',\'info@efficience-it.com\'),
