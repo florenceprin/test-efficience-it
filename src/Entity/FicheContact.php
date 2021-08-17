@@ -20,12 +20,12 @@ class FicheContact
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $nom;
+    private $lastName;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $prenom;
+    private $firstName;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -41,7 +41,7 @@ class FicheContact
      * @ORM\ManyToOne(targetEntity=Departements::class)
      * @ORM\JoinColumn(nullable=false)
      */
-    private $departement;
+    private $department;
 
     /**
      * @ORM\Column(type="datetime_immutable")
@@ -58,26 +58,26 @@ class FicheContact
         return $this->id;
     }
 
-    public function getNom(): ?string
+    public function getLastName(): ?string
     {
-        return $this->nom;
+        return $this->lastName;
     }
 
-    public function setNom(string $nom): self
+    public function setLastName(string $lastName): self
     {
-        $this->nom = $nom;
+        $this->lastName = $lastName;
 
         return $this;
     }
 
-    public function getPrenom(): ?string
+    public function getFirstName(): ?string
     {
-        return $this->prenom;
+        return $this->firstName;
     }
 
-    public function setPrenom(string $prenom): self
+    public function setFirstName(string $firstName): self
     {
-        $this->prenom = $prenom;
+        $this->firstName = $firstName;
 
         return $this;
     }
@@ -106,14 +106,14 @@ class FicheContact
         return $this;
     }
 
-    public function getDepartement(): ?Departements
+    public function getDepartment(): ?Departements
     {
-        return $this->departement;
+        return $this->department;
     }
 
-    public function setDepartement(?Departements $departement): self
+    public function setDepartment(?Departements $department): self
     {
-        $this->departement = $departement;
+        $this->department = $department;
 
         return $this;
     }

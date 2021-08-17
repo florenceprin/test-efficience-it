@@ -17,7 +17,7 @@ class ContactMailer
 
     public function sendMail(FicheContact $ficheContact)
     {
-        $destinataire = $ficheContact->getDepartement()->getEmail();
+        $destinataire = $ficheContact->getDepartment()->getEmail();
         $expediteur = $ficheContact->getEmail();
 
         $email = (new Email())
