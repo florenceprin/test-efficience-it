@@ -35,15 +35,13 @@ class ApiController extends AbstractController
             $status = 500;
             $errorMessage = $e->getMessage();
         }
-        $response = ["data" => $departments,
+        $response = ["data" => $serializer->normalize($departments),
             "error" => $error];
         if ($errorMessage !== "") {
             $response["error_message"] = $errorMessage;
         }
-        $departments = $serializer->serialize($response, 'json');
 
-
-        return new JsonResponse($departments, $status);
+        return new JsonResponse($response, $status);
 
     }
 
@@ -82,13 +80,12 @@ class ApiController extends AbstractController
             $ficheContact = [];
         }
 
-        $response = ["data" => $ficheContact,
+        $response = ["data" => $serializer->normalize($ficheContact),
             "error" => $error,
         ];
         if ($errorMessage !== "") {
             $response["error_message"] = $errorMessage;
         }
-        $response = $serializer->serialize($response, 'json');
 
 
         return new JsonResponse($response, $status);
