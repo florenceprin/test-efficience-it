@@ -10,3 +10,16 @@
 - php bin/console d:m:m
 - php bin/console server:start
 - accéder au projet sur localhost:8000/contact
+
+
+##utilisation de l'api
+###envoi de mail (endpoint "/api/contact")
+-exemple de body à envoyer en requête :
+
+{   
+  "lastName" : "Florence",   
+  "firstName" : "Prin",   
+  "email" : "florenceprin@test.fr",  
+  "message" : "test",  
+  "department" : 1  
+}
