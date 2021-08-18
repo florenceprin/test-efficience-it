@@ -26,15 +26,20 @@ class ApiController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $error = false;
         $status = 200;
+        $errorMessage = "";
         try {
             $departments = $em->getRepository(Departements::class)->findAll();
         } catch (\Exception $e) {
             $error = true;
             $departments = [];
             $status = 500;
+            $errorMessage = $e->getMessage();
         }
         $response = ["data" => $departments,
             "error" => $error];
+        if ($errorMessage !== "") {
+            $response["error_message"] = $errorMessage;
+        }
         $departments = $serializer->serialize($response, 'json');
 
 
@@ -50,20 +55,26 @@ class ApiController extends AbstractController
 
         $error = false;
         $status = 200;
+        $errorMessage = "";
+
 
         try {
             $json = $request->getContent();
             $ficheContact = $serializer->deserialize($json, FicheContact::class, 'json');
+            $data = json_decode($json, true);
             $entityManager = $this->getDoctrine()->getManager();
+            $department = $entityManager->getRepository(Departements::class)->find($data["department"]);
+            $ficheContact->setDepartment($department);
             $entityManager->persist($ficheContact);
             $entityManager->flush($ficheContact);
             $ficheContact = $entityManager->getRepository(FicheContact::class)->find($ficheContact->getId());
         } catch (\Exception $e) {
             $error = true;
+            $errorMessage = $e->getMessage();
         }
 
         if (!$error) {
-            $error = $mailer->sendMail($ficheContact);
+            $error = !$mailer->sendMail($ficheContact);
         }
 
         if ($error) {
@@ -72,7 +83,11 @@ class ApiController extends AbstractController
         }
 
         $response = ["data" => $ficheContact,
-            "error" => $error];
+            "error" => $error,
+        ];
+        if ($errorMessage !== "") {
+            $response["error_message"] = $errorMessage;
+        }
         $response = $serializer->serialize($response, 'json');
 
 

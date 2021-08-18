@@ -11,8 +11,9 @@ class ContactMailer
 
     private $mailer;
 
-    public function __construct(MailerInterface $mailer){
-        $this->mailer=$mailer;
+    public function __construct(MailerInterface $mailer)
+    {
+        $this->mailer = $mailer;
     }
 
     public function sendMail(FicheContact $ficheContact)
