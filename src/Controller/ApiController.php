@@ -4,12 +4,15 @@ namespace App\Controller;
 
 use App\Entity\Departements;
 use App\Entity\FicheContact;
+use App\Form\ContactType;
 use App\Service\ContactMailer;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -17,28 +20,31 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class ApiController extends AbstractController
 {
+
+    private $em;
+
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+    }
+
     /**
      * @Route("/departments ", name="departments")
      */
     public function departments(SerializerInterface $serializer): Response
     {
 
-        $em = $this->getDoctrine()->getManager();
-        $error = false;
-        $status = 200;
-        $errorMessage = "";
+        $response = [
+            "data" => [],
+            "error" => false];
         try {
-            $departments = $em->getRepository(Departements::class)->findAll();
-        } catch (\Exception $e) {
-            $error = true;
-            $departments = [];
+            $departments = $this->em->getRepository(Departements::class)->findAll();
+            $response ["data"] = $serializer->normalize($departments);
+            $status = 200;
+        } catch (\Exception|ExceptionInterface $e) {
+            $response["error"] = true;
+            $response["error_message"] = $e->getMessage();
             $status = 500;
-            $errorMessage = $e->getMessage();
-        }
-        $response = ["data" => $serializer->normalize($departments),
-            "error" => $error];
-        if ($errorMessage !== "") {
-            $response["error_message"] = $errorMessage;
         }
 
         return new JsonResponse($response, $status);
@@ -50,44 +56,31 @@ class ApiController extends AbstractController
      */
     public function contact(ContactMailer $mailer, Request $request, SerializerInterface $serializer)
     {
-
-        $error = false;
-        $status = 200;
-        $errorMessage = "";
-
+        $data = json_decode($request->getContent(), true);
+        $ficheContact = new FicheContact();
+        $form = $this->createForm(ContactType::class, $ficheContact);
+        $em = $this->getDoctrine()->getManager();
 
         try {
-            $json = $request->getContent();
-            $ficheContact = $serializer->deserialize($json, FicheContact::class, 'json');
-            $data = json_decode($json, true);
-            $entityManager = $this->getDoctrine()->getManager();
-            $department = $entityManager->getRepository(Departements::class)->find($data["department"]);
-            $ficheContact->setDepartment($department);
-            $entityManager->persist($ficheContact);
-            $entityManager->flush($ficheContact);
-            $ficheContact = $entityManager->getRepository(FicheContact::class)->find($ficheContact->getId());
+            $form->submit($data);
+            $this->em->persist($ficheContact);
+            $this->em->flush();
+            if ($mailer->sendMail($ficheContact) == false) {
+                throw (new \Exception);
+            }
+            $status = 201;
+            $message = 'Le formulaire de contact a bien été transmis par mail au département choisi.';
         } catch (\Exception $e) {
-            $error = true;
-            $errorMessage = $e->getMessage();
+            $status = 400;
+            $message = $e->getMessage();
         }
 
-        if (!$error) {
-            $error = !$mailer->sendMail($ficheContact);
-        }
+        $body = [
+            "data" => $data,
+            "message" => $message];
 
-        if ($error) {
-            $status = 500;
-            $ficheContact = [];
-        }
-
-        $response = ["data" => $serializer->normalize($ficheContact),
-            "error" => $error,
-        ];
-        if ($errorMessage !== "") {
-            $response["error_message"] = $errorMessage;
-        }
-
-
-        return new JsonResponse($response, $status);
+        return new JsonResponse($message, $status);
     }
+
+
 }
