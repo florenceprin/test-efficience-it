@@ -79,7 +79,7 @@ class ApiController extends AbstractController
             "data" => $data,
             "message" => $message];
 
-        return new JsonResponse($message, $status);
+        return new JsonResponse($body, $status);
     }
 
 
